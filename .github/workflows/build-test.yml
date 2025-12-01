@@ -1,0 +1,28 @@
+name: ✅ Build Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+    
+    - name: 🏗️ Build Docker image
+      run: |
+        echo "Starting Docker build..."
+        docker build -t test-image .
+        echo "✅ Build successful!"
+    
+    - name: 📊 Test Results
+      run: |
+        echo "## 🎉 Build Successful!" >> $GITHUB_STEP_SUMMARY
+        echo "### Next Steps:" >> $GITHUB_STEP_SUMMARY
+        echo "1. Fix Docker Hub credentials" >> $GITHUB_STEP_SUMMARY
+        echo "2. Update workflow for push" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ✅ Ready for Docker Hub" >> $GITHUB_STEP_SUMMARY
