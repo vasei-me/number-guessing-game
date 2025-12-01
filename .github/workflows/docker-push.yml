@@ -1,0 +1,58 @@
+name: 🚀 Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v3
+    
+    - name: 🏗️ Build Docker Image
+      id: build
+      run: |
+        docker build -t number-guessing-game .
+        echo "✅ Build completed"
+    
+    # فقط اگر secrets وجود دارن push کن
+    - name: 🔐 Login to Docker Hub
+      if: secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != ''
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    
+    - name: 🏷️ Tag Image
+      if: secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != ''
+      run: |
+        docker tag number-guessing-game ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest
+        docker tag number-guessing-game ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:${{ github.sha }}
+    
+    - name: 🚀 Push to Docker Hub
+      if: secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != ''
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:${{ github.sha }}
+        echo "✅ Pushed to Docker Hub"
+    
+    - name: 📊 Final Report
+      run: |
+        echo "## 🎉 Pipeline Complete!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ secrets.DOCKER_USERNAME }}" != "" ]; then
+          echo "### 🐳 Docker Hub:" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Pull Command:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ secrets.DOCKER_USERNAME }}/number-guessing-game" >> $GITHUB_STEP_SUMMARY
+          echo "docker run -it ${{ secrets.DOCKER_USERNAME }}/number-guessing-game" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "### ℹ️ Note:" >> $GITHUB_STEP_SUMMARY
+          echo "Docker Hub push skipped (no credentials configured)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To enable Docker Hub pushes, add DOCKER_USERNAME and DOCKER_PASSWORD secrets in repository settings." >> $GITHUB_STEP_SUMMARY
+        fi
