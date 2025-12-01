@@ -1,0 +1,31 @@
+name: ✅ Build Only (No Push)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v3
+    
+    - name: 🏗️ Build
+      run: |
+        docker build -t number-guessing-game .
+        echo "✅ Build successful!"
+    
+    - name: 📊 Report
+      run: |
+        echo "## 🎉 Ready for Distribution!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🐳 Local Run:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+        echo "# Clone and build locally:" >> $GITHUB_STEP_SUMMARY
+        echo "git clone https://github.com/vasei-me/number-guessing-game.git" >> $GITHUB_STEP_SUMMARY
+        echo "cd number-guessing-game" >> $GITHUB_STEP_SUMMARY
+        echo "docker build -t my-game ." >> $GITHUB_STEP_SUMMARY
+        echo "docker run -it my-game" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
