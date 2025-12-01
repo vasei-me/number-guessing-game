@@ -1,14 +1,8 @@
 node_modules
 npm-debug.log
 dist
-.DS_Store
 .git
-.gitignore
-.vscode
-.idea
-*.md
-*.spec.ts
-test
-coverage
+.github
 .env
-docker-compose.override.yml
+data
+*.md
