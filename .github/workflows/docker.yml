@@ -1,0 +1,31 @@
+# .github/workflows/docker.yml
+name: Build and Push Docker Image
+
+# کی اجرا شه؟
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# چیکار کنه؟
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest # روی چه سیستم عامل
+
+    steps:
+      # 1. کد رو دانلود کن
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Docker بساز
+      - name: Build Docker image
+        run: |
+          docker build -t number-game .
+          docker tag number-game ${{ secrets.DOCKER_USERNAME }}/number-game:latest
+
+      # 3. به Docker Hub آپلود کن
+      - name: Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push ${{ secrets.DOCKER_USERNAME }}/number-game:latest

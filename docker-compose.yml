@@ -1,0 +1,8 @@
+services:
+  number-guessing-game:
+    build: .
+    container_name: number-guessing-game
+    stdin_open: true  # برای ورودی استاندارد
+    tty: true         # برای ترمینال
+    volumes:
+      - ./data:/app/data
