@@ -1,4 +1,3 @@
-````markdown
 # 🎯 Number Guessing Game
 
 [![Build Status](https://github.com/your-username/number-guessing-game/actions/workflows/docker.yml/badge.svg)](https://github.com/your-username/number-guessing-game/actions)
@@ -38,7 +37,6 @@ docker run -it your-username/number-guessing-game
 # Or with data persistence
 docker run -it -v ./game-data:/app/data your-username/number-guessing-game
 ```
-````
 
 ### **Method 2: Using GitHub Container Registry**
 
