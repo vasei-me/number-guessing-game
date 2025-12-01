@@ -1,0 +1,39 @@
+name: 🐳 Build Docker Image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+    
+    - name: 🏗️ Build Docker image
+      run: |
+        echo "Building Docker image..."
+        docker build -t number-guessing-game .
+        echo "✅ Docker build completed!"
+    
+    - name: ✅ Verify image
+      run: |
+        echo "Verifying the built image..."
+        docker images number-guessing-game
+        echo "✅ Image verification complete!"
+    
+    - name: 📊 Success Report
+      run: |
+        echo "## 🎉 Build Successful!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Docker Image Details:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Image Name:** number-guessing-game" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status:** ✅ Ready to use" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Run Locally:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+        echo "docker build -t my-game ." >> $GITHUB_STEP_SUMMARY
+        echo "docker run -it my-game" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
