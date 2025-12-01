@@ -1,6 +1,5 @@
 # 🎯 Number Guessing Game
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/your-username/number-guessing-game)](https://hub.docker.com/r/your-username/number-guessing-game)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18-green.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -62,36 +61,6 @@ npm start
 
 # For development with hot reload
 npm run dev
-```
-
-## 📁 Project Structure
-
-```
-number-guessing-game/
-├── 📂 src/
-│   ├── 📂 core/                    # Domain Layer
-│   │   ├── 📂 domain/             # Business entities and rules
-│   │   │   ├── 📂 entities/       # Game, User, Guess
-│   │   │   ├── 📂 value-objects/  # DifficultyLevel, GameResult
-│   │   │   └── 📂 repositories/   # Repository interfaces
-│   │   └── 📂 application/        # Use Cases
-│   │       └── 📂 use-cases/      # StartGame, MakeGuess, PlayRound
-│   ├── 📂 infrastructure/         # External implementations
-│   │   ├── 📂 repositories/       # InMemoryGameRepository
-│   │   ├── 📂 services/           # Timer, Hint, RandomNumber services
-│   │   └── 📂 controllers/        # GameController, CLIController
-│   ├── 📂 shared/                 # Shared utilities
-│   │   └── 📂 utils/              # ConsoleIO, GameConfig
-│   └── main.ts                    # Application entry point
-├── 📂 dist/                       # Compiled JavaScript
-├── 📂 data/                       # Game data storage
-├── 📂 .github/workflows/          # CI/CD pipelines
-├── 📜 Dockerfile                  # Production Docker configuration
-├── 📜 Dockerfile.dev              # Development Docker configuration
-├── 📜 docker-compose.yml          # Docker Compose setup
-├── 📜 package.json                # Dependencies and scripts
-├── 📜 tsconfig.json               # TypeScript configuration
-└── 📜 README.md                   # This file
 ```
 
 ## 🐳 Docker Commands
@@ -169,7 +138,7 @@ npm test           # Run tests (coming soon)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/number-guessing-game.git
+git clone https://github.com/vasei-me/number-guessing-game.git
 
 # 2. Install dependencies
 npm install
@@ -206,4 +175,4 @@ This project uses GitHub Actions for continuous integration and deployment:
    - Latest tag always points to stable build
    - Version tags for each commit SHA
    - Badges for build status and Docker pulls
-     Project URL:https://roadmap.sh/projects/number-guessing-game
+     Project URL: https://roadmap.sh/projects/number-guessing-game
