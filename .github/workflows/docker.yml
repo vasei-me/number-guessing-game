@@ -1,31 +1,55 @@
-name: 🐳 Build Docker Image
+name: 🐳 Build and Push to Docker Hub
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v3
     
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: 🔐 Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
     - name: 🏗️ Build Docker image
-      run: |
-        echo "📦 Building Docker image..."
-        docker build -t number-guessing-game .
+      id: build
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest
+          ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     
-    - name: ✅ Test the build
+    - name: 🏷️ Tag for Docker Hub
       run: |
-        echo "🧪 Testing if image works..."
-        docker run --rm number-guessing-game --version || echo "Image built successfully!"
+        docker tag number-guessing-game ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest
+        docker tag number-guessing-game ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:${{ github.sha }}
     
-    - name: 🎉 Success
+    - name: 🚀 Push to Docker Hub
       run: |
-        echo "========================================"
-        echo "✅ SUCCESS: Docker image built!"
-        echo "📦 Image: number-guessing-game"
-        echo "🎮 Run locally: docker run -it number-guessing-game"
-        echo "========================================"
+        docker push ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/number-guessing-game:${{ github.sha }}
+    
+    - name: 📊 Generate badge
+      run: |
+        echo "✅ Image pushed successfully!"
+        echo "## Docker Image" >> $GITHUB_STEP_SUMMARY
+        echo "![Docker Pulls](https://img.shields.io/docker/pulls/${{ secrets.DOCKER_USERNAME }}/number-guessing-game)" >> $GITHUB_STEP_SUMMARY
+        echo "### Pull Command" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ secrets.DOCKER_USERNAME }}/number-guessing-game" >> $GITHUB_STEP_SUMMARY
+        echo "docker run -it ${{ secrets.DOCKER_USERNAME }}/number-guessing-game" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
